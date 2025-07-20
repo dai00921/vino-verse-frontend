@@ -1,0 +1,447 @@
+:root {
+    --font-sans: 'Playfair Display', serif;
+    --font-serif: 'Cormorant Garamond', serif;
+    --color-background: #FDFBF8; /* わずかに暖かみのある白 */
+    --color-text: #3A2B2B; /* 深い茶色 */
+    --color-primary: #7C0A02; /* 芳醇な赤ワイン色 */
+    --color-primary-dark: #5A0801; /* より深い赤ワイン色 */
+    --color-secondary: #E8DCDC; /* 落ち着いたローズグレー */
+    --color-accent: #B8860B; /* ゴールド */
+    --color-glass: rgba(255, 255, 255, 0.7);
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('https://source.unsplash.com/uz8gdVY1Jww/1920x1080');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#app-container {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    max-height: 800px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-background);
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 3rem 2.5rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* コンテンツとボタンを上下に配置 */
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(253, 251, 248, 0.9) 0%, rgba(253, 251, 248, 0.98) 100%);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.content-wrapper {
+    width: 100%;
+    animation: fadeIn 0.8s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* コンテンツを垂直方向中央に配置 */
+    flex-grow: 1; /* 利用可能なスペースを占有 */
+    overflow-y: auto; /* コンテンツが溢れた場合にスクロール可能にする */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.font-serif {
+    font-family: var(--font-serif);
+    color: var(--color-primary);
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+h1.font-serif { font-size: 2.4rem; margin: 1.2rem 0 1.5rem; } /* 下マージン調整 */
+h2.font-serif { font-size: 2.1rem; margin: 0.6rem 0 1rem; } /* 下マージン調整 */
+
+p {
+    line-height: 1.8;
+    margin: 1.2rem 0 1.5rem; /* 下マージン調整 */
+    font-size: 1.1rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+.btn-primary:hover { background-color: var(--color-primary-dark); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+.btn-secondary:hover { background-color: var(--color-primary); color: white; }
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: var(--color-accent);
+    margin: 0 auto 2rem;
+    box-shadow: 0 0 0 12px rgba(255,255,255,0.4), 0 6px 20px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.7);
+}
+
+.icon-circle svg {
+    width: 40px;
+    height: 40px;
+    stroke-width: 1.5;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+/* --- Wine Selection Screen --- */
+.wine-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.8rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 2.5rem auto;
+    padding: 1rem;
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.wine-item {
+    background-color: var(--color-glass);
+    border-radius: 16px;
+    padding: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.wine-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.wine-item.active {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 5px rgba(124, 10, 2, 0.4);
+    transform: translateY(-4px);
+}
+
+.wine-item img {
+    width: 90px;
+    height: 130px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+.wine-item h3 {
+    font-family: var(--font-serif);
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    margin: 0.6rem 0;
+}
+
+.wine-item p {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.5;
+    flex-grow: 1;
+    max-height: 6em; /* 6行分の高さに制限 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* はみ出したテキストを...で表示 */
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 表示する行数を制限 */
+    -webkit-box-orient: vertical;
+}
+
+.wine-item.active p {
+    font-weight: bold;
+    max-height: none; /* 選択時は全て表示 */
+    -webkit-line-clamp: unset;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.navigation-buttons .btn {
+    flex-grow: 1;
+}
+
+/* --- Question Screen --- */
+#progress-bar-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background-color: var(--color-secondary);
+}
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--color-primary);
+    transition: width 0.5s ease-out;
+    border-radius: 0 5px 5px 0;
+}
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+.category-icon {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+}
+.category-icon svg {
+    width: 35px;
+    height: 35px;
+    stroke-width: 1.5;
+}
+
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.2rem;
+    margin: 1.8rem 0;
+    border: 2px solid var(--color-secondary);
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-family: var(--font-sans);
+    background-color: var(--color-glass);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    min-height: 120px;
+    resize: vertical;
+}
+textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 5px rgba(184, 134, 11, 0.3);
+}
+
+.choice-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin: 1.8rem 0;
+}
+
+.choice-btn {
+    width: 100%;
+    padding: 1.2rem;
+    border-radius: 16px;
+    font-size: 1.15rem;
+    background-color: var(--color-glass);
+    border: 2px solid var(--color-secondary);
+    color: var(--color-text);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+}
+
+.choice-btn:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.choice-btn.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* --- Confirmation Screen --- */
+#answers-list {
+    width: 100%;
+    margin: 2.5rem 0;
+    text-align: left;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+.answer-item {
+    background-color: var(--color-glass);
+    border-radius: 16px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+}
+.answer-item h4 {
+    font-family: var(--font-serif);
+    color: var(--color-primary);
+    margin: 0 0 0.6rem 0;
+    font-size: 1.1rem;
+}
+.answer-item p {
+    margin: 0;
+    font-style: italic;
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
+/* --- Result Screen --- */
+#wine-label-container {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    margin: 2rem 0;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.6);
+}
+.wine-label-art {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+}
+.wine-label-content {
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    box-sizing: border-box;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+.wine-label-content h3 { font-size: 2rem; font-family: var(--font-serif); margin: 0; }
+.wine-label-content p { font-size: 1.1rem; font-style: italic; margin: 0.5rem 0; }
+
+.result-actions {
+    display: flex;
+    gap: 1.2rem;
+    width: 100%;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+/* Loading spinner */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border-left-color: white;
+    animation: spin 1s ease infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Utility */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 50px;
+    padding: 0.7rem 1.6rem; /* Adjusted */
+    font-size: 0.95rem; /* Adjusted */
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.btn svg { width: 1.1em; height: 1.1em; stroke-width: 2; }
